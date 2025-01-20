@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subject Review Platform</title>
+</head>
+<body>
+    <h1>Subjects</h1>
+    <ul>
+        {% for subject in subjects %}
+        <li><a href="/subject/{{ subject.id }}">{{ subject.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="/feed">Trending Subjects</a>
+</body>
+</html>
