@@ -1,15 +1,267 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Subjects</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:300,400,500" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ddd;
+        }
+
+        a {
+            color: #f0a500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #ffcc00;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f1f1f, #333);
+            color: #f0a500;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        header nav a {
+            margin: 0 1rem;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .container h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #f0a500;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-controls form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-controls select,
+        .filter-controls input[type="text"] {
+            padding: 0.5rem;
+            background-color: #1e1e1e;
+            color: #ddd;
+            border: 1px solid #f0a500;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .filter-controls select:focus,
+        .filter-controls input[type="text"]:focus {
+            outline: none;
+            border-color: #ffcc00;
+        }
+
+        /* Grid of Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .card a {
+            display: block;
+            color: inherit;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            padding: 1rem;
+            margin: 0;
+            background-color: #002147;
+            color: #f0a500;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .card p {
+            padding: 0 1rem 1rem;
+            margin: 0;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        /* Back Home Button */
+        .back-home {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #1e1e1e;
+            color: #f0a500;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-home:hover {
+            background-color: #333;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #002147;
+            color: #f0a500;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Trending Subjects</h1>
-    <ul>
-        {% for subject in subjects %}
-        <li><a href="/subject/{{ subject.id }}">{{ subject.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <a href="/">Back to Home</a>
+    <header>
+        <h1>Informaboxd</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/feed">Trending</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Trending Subjects</h2>
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <form method="GET" action="/feed">
+                <!-- Search by Subject Name -->
+                <input type="text" name="search" placeholder="Search Subjects" value="{{ search|default('') }}">
+
+                <!-- Filter by Period -->
+                <select name="filter_period" onchange="this.form.submit()">
+                    <option value="">Filter by Period</option>
+                    {% for period in unique_periods %}
+                    <option value="{{ period }}" {% if filter_period==period %}selected{% endif %}>{{ period }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Filter by Credits -->
+                <select name="filter_credits" onchange="this.form.submit()">
+                    <option value="">Filter by Credits</option>
+                    {% for credits in unique_credits %}
+                    <option value="{{ credits }}" {% if filter_credits==credits %}selected{% endif %}>{{ credits }}
+                        Credits</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Filter by SCQF -->
+                <select name="filter_scqf" onchange="this.form.submit()">
+                    <option value="">Filter by SCQF</option>
+                    {% for scqf in unique_scqf %}
+                    <option value="{{ scqf }}" {% if filter_scqf==scqf %}selected{% endif %}>{{ scqf }} SCQF</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        <!-- Trending Subjects Grid -->
+        <div class="grid">
+            {% for subject in subjects %}
+            <div class="card">
+                <a href="/subject/{{ subject.id }}">
+                    <h3>{{ subject.name }}</h3>
+                    <p><strong>Code:</strong> {{ subject.code }}</p>
+                    <p><strong>Period:</strong> {{ subject.period }}</p>
+                    <p><strong>Credits:</strong> {{ subject.credits }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="/" class="back-home">&larr; Back to Home</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Subject Review Platform | All Rights Reserved</p>
+    </footer>
 </body>
+
 </html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Informaboxd</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1f1f1f;
+            color: #ddd;
+        }
+
+        header {
+            background-color: #002147;
+            color: #F0A500;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #F0A500;
+        }
+
+        header nav a {
+            color: #F0A500;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 4rem auto;
+            background-color: #333;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .container h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #F0A500;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #ddd;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #444;
+            color: #ddd;
+            border: 1px solid #F0A500;
+            border-radius: 4px;
+        }
+
+        .form-group input:focus {
+            outline-color: #F0A500;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #F0A500;
+            color: #002147;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #cc8a00;
+        }
+
+        footer {
+            background-color: #002147;
+            color: #F0A500;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Informaboxd</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/feed">Trending</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Register</h2>
+        <form method="POST" action="/register">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+        <p style="color: #ddd; text-align: center;">Already have an account? <a href="/login" style="color: #F0A500;">Login</a></p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Subject Review Platform | All Rights Reserved</p>
+    </footer>
+</body>
+</html>

@@ -1,26 +1,307 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ subject.name }}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ subject.name }}</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:300,400,500" rel="stylesheet">
+  <style>
+    /* Base Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #121212;
+      color: #ddd;
+    }
+    
+    a {
+      text-decoration: none;
+      color: #f0a500;
+      transition: color 0.3s ease;
+    }
+    
+    a:hover {
+      color: #ffcc00;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #002147, #003366);
+      color: #f0a500;
+      padding: 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    header h1 {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5em;
+    }
+    
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    /* Subject Details Card */
+    .subject-details {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+      margin-bottom: 30px;
+    }
+    
+    .subject-details h2 {
+      margin-top: 0;
+      font-family: 'Montserrat', sans-serif;
+      color: #f0a500;
+    }
+    
+    .subject-details p {
+      line-height: 1.6;
+      margin: 10px 0;
+    }
+    
+    .subject-details p strong {
+      color: #f0a500;
+    }
+    
+    /* Average Rating */
+    .average-rating {
+      background: #1e1e1e;
+      padding: 15px 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    }
+    
+    .rating-stars {
+      display: flex;
+      gap: 5px;
+      font-size: 1.5em;
+    }
+    
+    .rating-stars span.filled {
+      color: #f0a500;
+    }
+    
+    .rating-stars span.empty {
+      color: #555;
+    }
+    
+    /* Reviews Section */
+    .reviews {
+      margin-bottom: 30px;
+    }
+    
+    .reviews h3 {
+      margin-bottom: 15px;
+      color: #f0a500;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .reviews-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .reviews-list li {
+      background: #1e1e1e;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
+    
+    .reviews-list li .rating-stars {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    
+    /* Review Form */
+    .rating-form-container {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+      margin-bottom: 30px;
+    }
+    
+    .rating-form-container form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .rating-form-container label {
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #f0a500;
+    }
+    
+    .rating-form-container textarea {
+      resize: vertical;
+      min-height: 100px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #555;
+      border-radius: 5px;
+      font-family: 'Roboto', sans-serif;
+      background: #333;
+      color: #ddd;
+    }
+    
+    .rating-form-container button {
+      background: #f0a500;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .rating-form-container button:hover {
+      background: #cc8e00;
+    }
+    
+    .back-home {
+      display: inline-block;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+    
+    /* Footer */
+    footer {
+      background: #002147;
+      color: #f0a500;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+      font-family: 'Montserrat', sans-serif;
+    }
+  </style>
 </head>
 <body>
+  <header>
     <h1>{{ subject.name }}</h1>
-    <p>{{ subject.description }}</p>
-    <h2>Average Rating: {{ avg_rating or "No ratings yet" }}</h2>
-    <h3>Reviews:</h3>
-    <ul>
+  </header>
+</body>
+</html>
+  
+  <div class="container">
+    <!-- Subject Details Card -->
+    <div class="subject-details">
+      <h2>Subject Details</h2>
+      <p><strong>Code:</strong> {{ subject.code }}</p>
+      <p><strong>School:</strong> {{ subject.school }}</p>
+      <p><strong>College:</strong> {{ subject.college }}</p>
+      <p><strong>SCQF Level:</strong> {{ subject.scqf }}</p>
+      <p><strong>Credits:</strong> {{ subject.credits }}</p>
+      <p><strong>Period:</strong> {{ subject.period }}</p>
+      <p><strong>Availability:</strong> {{ subject.availability }}</p>
+      <p><strong>Summary:</strong> {{ subject.summary }}</p>
+      <p><strong>Assessment:</strong> {{ subject.assessment }}</p>
+      <p><strong>Learning Outcomes:</strong> {{ subject.learning_outcomes }}</p>
+      <p><strong>Total Hours:</strong> {{ subject.total_hours }}</p>
+      <p><strong>Prerequisites:</strong> {{ subject.prerequisites }}</p>
+      <p><strong>Prohibited Combinations:</strong> {{ subject.prohibited_combinations }}</p>
+      <p><strong>Additional Costs:</strong> {{ subject.additional_costs }}</p>
+      <p><strong>Course Organizer:</strong> {{ subject.course_organizer }}</p>
+      <p><strong>URL:</strong> <a href="{{ subject.url }}" target="_blank">{{ subject.url }}</a></p>
+    </div>
+    
+    <!-- Average Rating Card -->
+    <div class="average-rating">
+      <div>
+        <strong>Average Rating:</strong>
+        {% if avg_rating %}
+          <div class="rating-stars">
+            {% for i in range(1, 6) %}
+              <span class="{{ 'filled' if i <= avg_rating else 'empty' }}">★</span>
+            {% endfor %}
+          </div>
+          <span>({{ avg_rating|round(1) }}/5)</span>
+        {% else %}
+          <span>No ratings yet</span>
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- Reviews List -->
+    <div class="reviews">
+      <h3>Reviews</h3>
+      <ul class="reviews-list">
         {% for review in reviews %}
-        <li>{{ review.comment }} - Rating: {{ review.rating }}</li>
+          <li>
+            <div class="rating-stars">
+              {% for i in range(1, 6) %}
+                <span class="{{ 'filled' if i <= review.rating else 'empty' }}">★</span>
+              {% endfor %}
+            </div>
+            <p><strong>Comment:</strong> {{ review.comment }}</p>
+          </li>
         {% endfor %}
-    </ul>
-    <form method="post" action="/add_review/{{ subject.id }}">
-        <input type="hidden" name="user_id" value="1">
-        <label for="rating">Rating:</label>
-        <input type="number" name="rating" min="1" max="5">
-        <label for="comment">Comment:</label>
-        <textarea name="comment"></textarea>
-        <button type="submit">Add Review</button>
-    </form>
-    <a href="/">Back to Home</a>
+      </ul>
+    </div>
+    
+    <!-- Review Form -->
+    <div class="rating-form-container">
+      <form method="post" action="/add_review/{{ subject.id }}" id="rating-form">
+        <label for="rating">Your Rating:</label>
+        <div class="rating-stars" id="rating-stars">
+          <span class="empty" data-value="1">☆</span>
+          <span class="empty" data-value="2">☆</span>
+          <span class="empty" data-value="3">☆</span>
+          <span class="empty" data-value="4">☆</span>
+          <span class="empty" data-value="5">☆</span>
+        </div>
+        <input type="hidden" name="rating" id="selected-rating" required>
+        <label for="comment">Your Comment:</label>
+        <textarea name="comment" required></textarea>
+        <button type="submit">Submit Review</button>
+      </form>
+    </div>
+    
+    <a href="/" class="back-home">&larr; Back to Home</a>
+  </div>
+  
+  <footer>
+    <p>&copy; 2025 Subject Review Platform</p>
+  </footer>
+  
+  <script>
+    const stars = document.querySelectorAll('#rating-stars span');
+    const hiddenRatingInput = document.getElementById('selected-rating');
+    let selectedRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('click', function () {
+        selectedRating = this.getAttribute('data-value');
+        hiddenRatingInput.value = selectedRating;
+        updateRating(stars, selectedRating);
+      });
+    });
+
+    function updateRating(stars, rating) {
+      stars.forEach(star => {
+        const value = star.getAttribute('data-value');
+        star.classList.toggle('filled', rating >= value);
+        star.classList.toggle('empty', rating < value);
+      });
+    }
+  </script>
 </body>
 </html>
