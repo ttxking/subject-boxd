@@ -2,40 +2,108 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4; /* Light background for contrast */
+    color: #041E42; /* Navy blue for text */
 }
 
 header {
-    background-color: #333;
-    color: #fff;
+    background: linear-gradient(135deg, #ffffff, #041E42, #D50032); /* Navy blue to red gradient */
+    color: #000000; /* White text for contrast */
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 header h1 {
     margin: 0;
     font-size: 1.8rem;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 0rem;
+}
+
+header h1 img {
+    height: 40px; /* Adjust logo size */
 }
 
 header nav a {
-    color: #fff;
+    color: #ffffff; /* White text */
     text-decoration: none;
     margin: 0 1rem;
+    font-weight: 500;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+    color: #ffcc00; /* Yellow accent on hover */
 }
 
 .container {
-    padding: 2rem;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
 .container h2 {
     font-size: 2rem;
     margin-bottom: 1.5rem;
+    color: #D50032; /* Red accent */
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+.trending-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.trending-column {
+    width: 48%;
+    background: #ffffff; /* White background */
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.trending-column h3 {
+    font-size: 1.5rem;
+    color: #041E42; /* Navy blue */
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.trending-subject {
+    background: #f9f9f9; /* Light gray background */
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+.trending-subject:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(213, 0, 50, 0.2); /* Red shadow on hover */
+}
+
+.trending-subject h4 {
+    font-size: 1.2rem;
+    color: #D50032; /* Red accent */
+    margin: 0;
+}
+
+.trending-subject p {
+    margin: 0.5rem 0;
+    color: #041E42; /* Navy blue */
 }
 
 .grid {
@@ -45,7 +113,7 @@ header nav a {
 }
 
 .card {
-    background: #fff;
+    background: #ffffff; /* White background */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
@@ -54,6 +122,7 @@ header nav a {
 
 .card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(213, 0, 50, 0.2); /* Red shadow on hover */
 }
 
 .card a {
@@ -65,20 +134,104 @@ header nav a {
     font-size: 1.2rem;
     padding: 1rem;
     margin: 0;
-    background-color: #333;
-    color: #fff;
+    background-color: #041E42; /* Navy blue */
+    color: #ffffff; /* White text */
 }
 
 .card p {
     padding: 1rem;
     margin: 0;
     font-size: 0.9rem;
-    color: #666;
+    color: #041E42; /* Navy blue */
+}
+
+.filter-controls {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-controls select,
+.filter-controls input[type="text"] {
+    padding: 0.5rem;
+    background-color: #ffffff; /* White background */
+    color: #041E42; /* Navy blue */
+    border: 1px solid #D50032; /* Red accent */
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.filter-controls select:focus,
+.filter-controls input[type="text"]:focus {
+    outline: none;
+    border-color: #041E42; /* Navy blue on focus */
+}
+
+#suggestions {
+    background-color: #ffffff; /* White background */
+    color: #041E42; /* Navy blue */
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#suggestions div {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+#suggestions div:hover {
+    background-color: #f9f9f9; /* Light gray on hover */
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #041E42; /* Navy blue */
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #ffffff; /* White background */
+    color: #041E42; /* Navy blue */
+    border: 1px solid #D50032; /* Red accent */
+    border-radius: 4px;
+}
+
+.form-group input:focus {
+    outline-color: #041E42; /* Navy blue on focus */
+}
+
+.form-group button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #D50032; /* Red accent */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-group button:hover {
+    background-color: #b30028; /* Darker red on hover */
 }
 
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: #041E42; /* Navy blue */
+    color: #ffffff; /* White text */
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
@@ -88,12 +241,207 @@ footer {
     display: inline-block;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
-    background-color: #333;
-    color: #fff;
+    background-color: #D50032; /* Red accent */
+    color: #ffffff; /* White text */
     text-decoration: none;
     border-radius: 5px;
 }
 
 .back-home:hover {
-    background-color: #555;
+    background-color: #b30028; /* Darker red on hover */
+}
+
+.subject-details {
+    background: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.subject-details h2 {
+    margin-top: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: #D50032; /* Red accent */
+}
+
+.subject-details p {
+    line-height: 1.6;
+    margin: 10px 0;
+    color: #041E42; /* Navy blue */
+}
+
+.subject-details p strong {
+    color: #D50032; /* Red accent */
+}
+
+.average-rating {
+    background: #ffffff; /* White background */
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rating-stars {
+    display: flex;
+    gap: 5px;
+    font-size: 1.5em;
+}
+
+.rating-stars span.filled {
+    color: #D50032; /* Red accent */
+}
+
+.rating-stars span.empty {
+    color: #cccccc; /* Gray for empty stars */
+}
+
+.reviews {
+    margin-bottom: 30px;
+}
+
+.reviews h3 {
+    margin-bottom: 15px;
+    color: #D50032; /* Red accent */
+    font-family: 'Montserrat', sans-serif;
+}
+
+.reviews-list {
+    list-style: none;
+    padding: 0;
+}
+
+.reviews-list li {
+    background: #f9f9f9; /* Light gray background */
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-list li .rating-stars {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.rating-form-container {
+    background: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.rating-form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.rating-form-container label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #041E42; /* Navy blue */
+}
+
+.rating-form-container textarea {
+    resize: vertical;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #D50032; /* Red accent */
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    background: #ffffff; /* White background */
+    color: #041E42; /* Navy blue */
+}
+
+.rating-form-container button {
+    background: #D50032; /* Red accent */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.rating-form-container button:hover {
+    background: #b30028; /* Darker red on hover */
+}
+
+/* Floating Login Container */
+.login-container {
+    max-width: 400px;
+    margin: 4rem auto; /* Center the container vertically and horizontally */
+    background-color: #ffffff; /* White background */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for floating effect */
+    text-align: center;
+}
+
+.login-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #041E42; /* Navy blue for heading */
+}
+
+.login-container .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.login-container .form-group label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #041E42; /* Navy blue for labels */
+}
+
+.login-container .form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #f9f9f9; /* Light gray background for inputs */
+    color: #041E42; /* Navy blue for text */
+    border: 1px solid #D50032; /* Red border for inputs */
+    border-radius: 4px;
+}
+
+.login-container .form-group input:focus {
+    outline: none;
+    border-color: #041E42; /* Navy blue on focus */
+}
+
+.login-container .form-group button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #D50032; /* Red background for button */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-container .form-group button:hover {
+    background-color: #b30028; /* Darker red on hover */
+}
+
+.login-container p {
+    color: #041E42; /* Navy blue for text */
+    margin-top: 1rem;
+}
+
+.login-container a {
+    color: #D50032; /* Red for links */
+    text-decoration: none;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
 }

@@ -6,153 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informaboxd - Explore Subjects</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        /* General reset for margin and padding */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1f1f1f;
-            /* Dark background similar to Letterboxd */
-            color: #ddd;
-            /* Light gray text for contrast */
-        }
-
-        header {
-            background-color: #002147;
-            /* University of Edinburgh dark blue */
-            color: #F0A500;
-            /* Gold for text */
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: #F0A500;
-            /* Gold for title */
-        }
-
-        header nav a {
-            color: #F0A500;
-            /* Gold for links */
-            text-decoration: none;
-            margin: 0 1rem;
-            font-weight: bold;
-        }
-
-        header nav a:hover {
-            text-decoration: underline;
-        }
-
-        .container {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .container h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: #F0A500;
-            /* Gold color for section titles */
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background: #333;
-            /* Dark background for card */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .card h3 {
-            font-size: 1.2rem;
-            padding: 1rem;
-            margin: 0;
-            background-color: #002147;
-            /* Dark blue header for card */
-            color: #F0A500;
-            /* Gold text for card title */
-        }
-
-        .card p {
-            padding: 1rem;
-            margin: 0;
-            font-size: 0.9rem;
-            color: #ddd;
-            /* Light gray text for card content */
-        }
-
-        footer {
-            background-color: #002147;
-            /* Dark blue footer */
-            color: #F0A500;
-            /* Gold text for footer */
-            text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
-        }
-
-        .filter-controls {
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 1.5rem;
-        }
-
-        .filter-controls select {
-            padding: 0.5rem;
-            margin-right: 1rem;
-            background-color: #333;
-            /* Dark background for selects */
-            color: #ddd;
-            /* Light gray text for select options */
-            border: 1px solid #F0A500;
-            /* Gold border for selects */
-        }
-
-        .filter-controls select:focus {
-            outline-color: #F0A500;
-            /* Gold outline on focus */
-        }
-    </style>
 </head>
 
 <body>
     <header>
-        <h1>Informaboxd</h1>
+        <h1>
+            <img src="{{ url_for('static', filename='images/uoe_logo.png') }}" alt="University of Edinburgh Logo"> / Informaboxd
+        </h1>
+        <nav>
         <nav>
             <a href="/">Home</a>
             <a href="/feed">Trending</a>
-            <a href="/logout">Logout</a>
+            {% if logged_in %}
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+            {% endif %}
         </nav>
     </header>
 
     <div class="container">
         <h2>Explore All Subjects</h2>
 
-        <!-- Filter Controls -->
+        <!-- Filter Controls with Search Bar -->
         <div class="filter-controls">
             <form method="GET" action="/">
+                <!-- Search Bar -->
+                <input type="text" name="search" id="search" placeholder="Search Subjects" value="{{ search|default('') }}" oninput="fetchSuggestions(this.value)">
+                <div id="suggestions"></div>
+
                 <!-- Filter by Period -->
                 <select name="filter_period" onchange="this.form.submit()">
                     <option value="">Filter by Period</option>
@@ -165,8 +47,7 @@
                 <select name="filter_credits" onchange="this.form.submit()">
                     <option value="">Filter by Credits</option>
                     {% for credits in unique_credits %}
-                    <option value="{{ credits }}" {% if filter_credits==credits %}selected{% endif %}>{{ credits }}
-                        Credits</option>
+                    <option value="{{ credits }}" {% if filter_credits==credits %}selected{% endif %}>{{ credits }} Credits</option>
                     {% endfor %}
                 </select>
 
@@ -174,8 +55,7 @@
                 <select name="filter_scqf" onchange="this.form.submit()">
                     <option value="">Filter by SCQF</option>
                     {% for scqf in unique_scqf %}
-                    <option value="{{ scqf }}" {% if filter_scqf==scqf %}selected{% endif %}>{{ scqf }}
-                        SCQF</option>
+                    <option value="{{ scqf }}" {% if filter_scqf==scqf %}selected{% endif %}>{{ scqf }} SCQF</option>
                     {% endfor %}
                 </select>
             </form>
@@ -198,6 +78,22 @@
         <p>&copy; 2025 Subject Review Platform | All Rights Reserved</p>
     </footer>
 
+    <script>
+        function fetchSuggestions(query) {
+            if (query.length < 2) {
+                document.getElementById('suggestions').innerHTML = '';
+                return;
+            }
+            fetch(`/search_suggestions?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const suggestions = document.getElementById('suggestions');
+                    suggestions.innerHTML = data.map(subject =>
+                        `<div onclick="window.location.href='/subject/${subject.id}'">${subject.name}</div>`
+                    ).join('');
+                });
+        }
+    </script>
 </body>
 
 </html>

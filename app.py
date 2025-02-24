@@ -8,9 +8,9 @@ from bs4 import BeautifulSoup
 import requests
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///subjects.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_secret_key')
 
 db.init_app(app)
 login_manager = LoginManager(app)
@@ -45,20 +45,14 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Login an existing user."""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-        # Find the user by username
         user = User.query.filter_by(username=username).first()
-
         if user and check_password_hash(user.password, password):
-            login_user(user)  # Log the user in
-            return redirect(url_for('home'))  # Redirect to the home page or a protected route
-
-        return jsonify({"error": "Invalid username or password."}), 400
-
+            login_user(user)
+            return redirect(url_for('home'))
+        return render_template('login.html', error="Invalid username or password.")
     return render_template('login.html')
 
 @app.route('/logout', methods=['GET'])
@@ -66,7 +60,7 @@ def login():
 def logout():
     """Logout the current user."""
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 @app.route('/', methods=['GET'])
 def home():
@@ -110,7 +104,8 @@ def home():
                            filter_scqf=filter_scqf,
                            unique_periods=unique_periods, 
                            unique_credits=unique_credits,
-                           unique_scqf=unique_scqf)
+                           unique_scqf=unique_scqf,
+                           logged_in=current_user.is_authenticated,)
 
 @app.route('/subject/<int:subject_id>')
 def subject_page(subject_id):
@@ -155,12 +150,24 @@ def add_review(subject_id):
 
 @app.route('/feed')
 def feed():
-    """Display recent reviews and trending subjects."""
-    recent_reviews = Review.query.order_by(Review.created_at.desc()).limit(10).all()
-    trending_subject_ids = {review.subject_id for review in recent_reviews}
-    trending_subjects = Subject.query.filter(Subject.id.in_(trending_subject_ids)).all()
-    return render_template('feed.html', subjects=trending_subjects, reviews=recent_reviews)
+    # Most Reviewed Subjects
+    most_reviewed = db.session.query(
+        Subject.id,  # Include subject ID
+        Subject.name,
+        db.func.count(Review.id).label('review_count')
+    ).join(Review).group_by(Subject.id).order_by(db.desc('review_count')).limit(5).all()
 
+    # Highest Rated Subjects
+    highest_rated = db.session.query(
+        Subject.id,  # Include subject ID
+        Subject.name,
+        db.func.avg(Review.rating).label('avg_rating')
+    ).join(Review).group_by(Subject.id).order_by(db.desc('avg_rating')).limit(5).all()
+
+    return render_template('feed.html', 
+                          most_reviewed=most_reviewed, 
+                          highest_rated=highest_rated, 
+                          logged_in=current_user.is_authenticated)
 
 def extract_subject_details(url):
     """Fetch and parse course details from the University of Edinburgh DRPS course page."""
@@ -573,6 +580,15 @@ def add_subjects_from_html():
 
     db.session.commit()
     return jsonify({"message": f"{len(subjects_to_add)} subjects added successfully!"})
+
+@app.route('/search_suggestions')
+def search_suggestions():
+    query = request.args.get('q', '')
+    if query:
+        subjects = Subject.query.filter(Subject.name.ilike(f'%{query}%')).limit(10).all()
+        suggestions = [{'id': subject.id, 'name': subject.name} for subject in subjects]
+        return jsonify(suggestions)
+    return jsonify([])
 
 if __name__ == '__main__':
     if not os.path.exists('templates'):
