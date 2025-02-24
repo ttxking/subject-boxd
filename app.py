@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 from bs4 import BeautifulSoup
 import requests
+from flask_migrate import Migrate, upgrade  # Added for database migrations
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
@@ -13,8 +14,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_secret_key')
 
 db.init_app(app)
+migrate = Migrate(app, db)  # Enable migrations
+
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+
+# Run database migrations on startup
+with app.app_context():
+    upgrade()  # Apply migrations automatically
+
 
 @login_manager.user_loader
 def load_user(user_id):
