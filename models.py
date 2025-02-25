@@ -26,7 +26,7 @@ class Subject(db.Model):
     summary = db.Column(db.Text, nullable=True)
     assessment = db.Column(db.Text, nullable=True)
     learning_outcomes = db.Column(db.Text, nullable=True)
-    total_hours = db.Column(db.String(50), nullable=True)
+    total_hours = db.Column(db.Text, nullable=True)
     prerequisites = db.Column(db.Text, nullable=True)
     prohibited_combinations = db.Column(db.Text, nullable=True)
     additional_costs = db.Column(db.Text, nullable=True)
